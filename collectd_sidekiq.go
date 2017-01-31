@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,7 +20,7 @@ type stats struct {
 	Retries   int64       `json:"retries"`
 }
 
-func setup(server string, database string, pool string) {
+func setup(server string, database string, pool string, queues string) {
 	workers.Configure(map[string]string{
 		// location of redis instance
 		"server": server,
@@ -31,7 +32,10 @@ func setup(server string, database string, pool string) {
 		"process": "1",
 	})
 
-	workers.Process("scraper", func(message *workers.Msg) {}, 0)
+	for _, q := range strings.Split(queues, "/") {
+		// Register each queue with the workers library, so it's picked up on calls to workers.Stats()
+		workers.Process(q, func(message *workers.Msg) {}, 0)
+	}
 }
 
 func poll(t time.Time, hostname string, interval int) {
@@ -60,6 +64,7 @@ func poll(t time.Time, hostname string, interval int) {
 var (
 	hostname = kingpin.Flag("hostname", "Hostname").OverrideDefaultFromEnvar("COLLECTD_HOSTNAME").Default("UNKNOWN").String()
 	interval = kingpin.Flag("interval", "Interval").OverrideDefaultFromEnvar("COLLECTD_INTERVAL").Default("10").Int()
+	queues   = kingpin.Flag("queues", "Queues to get statistics for").Default("default").String()
 	server   = kingpin.Flag("redis-server", "Redis server in host:port format").Default("localhost:6379").String()
 	database = kingpin.Flag("redis-database", "Redis database").Default("0").String()
 	pool     = kingpin.Flag("redis-pool", "Redis pool size").Default("5").String()
@@ -67,7 +72,7 @@ var (
 
 func main() {
 	kingpin.Parse()
-	setup(*server, *database, *pool)
+	setup(*server, *database, *pool, *queues)
 
 	duration, err := time.ParseDuration(strconv.Itoa(*interval) + "s")
 	if err != nil {

@@ -7,7 +7,8 @@ A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index
 Install the plugin in `/usr/local/bin` by running:
 
 ```
-wget https://github.com/auxesis/collectd-sidekiq-plugin/releases/download/0.1.1/collectd_sidekiq.linux_amd64 -O /usr/local/bin/check_sidekiq
+wget https://github.com/auxesis/collectd-sidekiq-plugin/releases/download/0.1.1/collectd_sidekiq.linux_amd64 -O /usr/local/bin/collectd_sidekiq
+chmod +x /usr/local/bin/collectd_sidekiq
 ```
 
 Then run the plugin to test it works:
@@ -21,7 +22,7 @@ Then add collectd configuration:
 ```
 LoadPlugin exec
 <Plugin exec>
-  Exec deploy "/usr/local/bin/check_sidekiq"
+  Exec deploy "/usr/local/bin/collectd_sidekiq"
 </Plugin>
 ```
 
@@ -53,16 +54,22 @@ You should soon see Sidekiq stats showing up in your graphs:
 
 ### Customising the check
 
+You almost certainly aren't using the default Sidekiq queues, so to change the queues to query:
+
+```
+collectd_sidekiq --queues="scraper,worker"
+```
+
 To change the Redis instance to query:
 
 ```
-./collectd_sidekiq --redis-server="192.168.1.111:6380"
+collectd_sidekiq --redis-server="192.168.1.111:6380"
 ```
 
 To change the Redis database to query:
 
 ```
-./collectd_sidekiq --redis-database=7
+collectd_sidekiq --redis-database=7
 ```
 
 As of collectd 4.9, the exec plugin exports two environment variables:
@@ -73,13 +80,22 @@ As of collectd 4.9, the exec plugin exports two environment variables:
 To change the hostname the check reports as:
 
 ```
-./collectd_sidekiq --hostname=$(hostname -f)
+collectd_sidekiq --hostname=$(hostname -f)
 ```
 
 To change the interval the check runs at (this is useful for debugging):
 
 ```
-./collectd_sidekiq --interval=5
+collectd_sidekiq --interval=5
+```
+
+For these settings to take effect, make sure you update your collectd configuration appropriately:
+
+```
+LoadPlugin exec
+<Plugin exec>
+  Exec deploy "/usr/local/bin/collectd_sidekiq --queues='scraper,worker' --redis-server='localhost:6780' --redis-database=7"
+</Plugin>
 ```
 
 ## Developing
