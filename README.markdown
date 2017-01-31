@@ -7,7 +7,7 @@ A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index
 Install the plugin in `/usr/local/bin` by running:
 
 ```
-wget https://github.com/auxesis/collectd-sidekiq-plugin/releases/download/0.1.1/collectd_sidekiq.linux_amd64 -O /usr/local/bin/collectd_sidekiq
+wget https://github.com/auxesis/collectd-sidekiq-plugin/releases/download/0.2.0/collectd_sidekiq.linux_amd64 -O /usr/local/bin/collectd_sidekiq
 chmod +x /usr/local/bin/collectd_sidekiq
 ```
 
