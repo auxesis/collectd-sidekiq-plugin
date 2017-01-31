@@ -2,6 +2,8 @@
 
 A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index.php/Plugin:Exec) to query [Sidekiq](http://sidekiq.org/) general and queue statistics.
 
+![Travis build status](https://api.travis-ci.org/auxesis/collectd-sidekiq-plugin.svg?branch=master)
+
 ## Using
 
 Install the plugin in `/usr/local/bin` by running:
@@ -108,13 +110,25 @@ cd collectd-sidekiq-plugin
 make # runs a local copy of the plugin
 ```
 
+### Building
 
-### Releasing
-
-Follow the above developing steps, then run:
+To build a release locally, follow the above developing steps, then run:
 
 ```
 make build
 ```
 
 This will produce a binary at `./collectd_sidekiq.linux_amd64`
+
+### Releasing
+
+Releases are published on GitHub, built and [managed by Travis](https://github.com/auxesis/collectd-sidekiq-plugin/blob/master/.travis.yml).
+
+To cut a release: add a tag, and push to GitHub:
+
+```
+git tag -a '0.2.1' -m 'Release 0.2.1'
+git push origin 0.2.1
+```
+
+This will trigger a [Travis build](https://travis-ci.org/auxesis/collectd-sidekiq-plugin), which will push a [release to GitHub](http://github.com/auxesis/collectd-sidekiq-plugin/releases).
