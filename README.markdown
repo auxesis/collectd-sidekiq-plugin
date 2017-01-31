@@ -1,6 +1,6 @@
 # collectd-sidekiq-plugin
 
-A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index.php/Plugin:Exec) to query [Sidekiq](http://sidekiq.org/) status.
+A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index.php/Plugin:Exec) to query [Sidekiq](http://sidekiq.org/) general and queue statistics.
 
 ## Using
 
