@@ -4,10 +4,16 @@ A [collectd](http://collectd.org/) [exec plugin](https://collectd.org/wiki/index
 
 ## Using
 
+Install the plugin in `/usr/local/bin` by running:
 
 ```
-wget github -O /usr/local/bin/check_sidekiq
-./collectd_sidekiq --help
+wget https://github.com/auxesis/collectd-sidekiq-plugin/releases/download/0.1.1/collectd_sidekiq.linux_amd64 -O /usr/local/bin/check_sidekiq
+```
+
+Then run the plugin to test it works:
+
+```
+/usr/local/bin/collectd_sidekiq --help
 ```
 
 Then add collectd configuration:
@@ -19,7 +25,7 @@ LoadPlugin exec
 </Plugin>
 ```
 
-(Change `deploy` to whatever user you want to run the check as.)
+(Change `deploy` to whatever user you want to run the check as)
 
 Then restart collectd:
 
