@@ -105,7 +105,7 @@ Ensure you have Git, Go, and Redis installed, then run:
 ```
 git clone https://github.com/auxesis/collectd-sidekiq-plugin.git
 cd collectd-sidekiq-plugin
-make # runs a local copy of the check
+make # runs a local copy of the plugin
 ```
 
 
@@ -117,4 +117,4 @@ Follow the above developing steps, then run:
 make build
 ```
 
-This will produce a binary at ./collectd_sidekiq.linux_amd64
+This will produce a binary at `./collectd_sidekiq.linux_amd64`
