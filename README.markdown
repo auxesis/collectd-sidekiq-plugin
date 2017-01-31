@@ -27,6 +27,16 @@ LoadPlugin exec
 
 (Change `deploy` to whatever user you want to run the check as)
 
+Add these to your `types.db` (probably in `/usr/share/collectd/types.db`)
+
+```
+# Sidekiq types
+processed               value:DERIVE:0:U
+failed                  value:DERIVE:0:U
+retries                 value:DERIVE:0:U
+queue_depth             value:GAUGE:0:U
+```
+
 Then restart collectd:
 
 ```
@@ -39,7 +49,7 @@ You should soon see Sidekiq stats showing up in your graphs:
 
 ![image](https://cloud.githubusercontent.com/assets/12306/22453520/88b5a172-e7d3-11e6-8894-95b7087532a5.png)
 
-(the above is from Grafana + InfluxDB with a query like `SELECT mean("value") FROM "sidekiq_value" WHERE "host" = 'li123-45.members.linode.com' AND "type" = 'queue_depth' AND "instance" = 'scraper' AND $timeFilter GROUP BY time($interval) fill(null)`)
+(the above is from [Grafana](http://grafana.org/) + [InfluxDB](https://www.influxdata.com/) with a query like `SELECT mean("value") FROM "sidekiq_value" WHERE "host" = 'li123-45.members.linode.com' AND "type" = 'queue_depth' AND "instance" = 'default' AND $timeFilter GROUP BY time($interval) fill(null)`)
 
 ### Customising the check
 
