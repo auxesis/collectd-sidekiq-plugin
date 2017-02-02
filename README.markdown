@@ -110,6 +110,12 @@ cd collectd-sidekiq-plugin
 make # runs a local copy of the plugin
 ```
 
+If you want to pass arguments to make, do so by setting `ARGS`:
+
+```
+make ARGS="--queues=hello,default,low,small --interval=1"
+```
+
 ### Building
 
 To build a release locally, follow the above developing steps, then run:
