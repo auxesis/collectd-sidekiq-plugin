@@ -37,6 +37,9 @@ Add these to your `types.db` (probably in `/usr/share/collectd/types.db`)
 processed               value:DERIVE:0:U
 failed                  value:DERIVE:0:U
 retries                 value:DERIVE:0:U
+processes               value:GAUGE:0:U
+dead                    value:DERIVE:0:U
+scheduled               value:GAUGE:0:U
 queue_depth             value:GAUGE:0:U
 ```
 
