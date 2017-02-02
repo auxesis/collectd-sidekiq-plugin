@@ -18,6 +18,9 @@ type stats struct {
 	Jobs      interface{} `json:"jobs"`
 	Enqueued  interface{} `json:"enqueued"`
 	Retries   int64       `json:"retries"`
+	Scheduled int64       `json:"scheduled"`
+	Dead      int64       `json:"dead"`
+	Processes int64       `json:"processes"`
 }
 
 func setup(server string, database string, pool string, queues string) {
@@ -56,6 +59,9 @@ func poll(t time.Time, hostname string, interval int) {
 	fmt.Printf("PUTVAL %s/sidekiq/processed interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Processed)
 	fmt.Printf("PUTVAL %s/sidekiq/failed interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Failed)
 	fmt.Printf("PUTVAL %s/sidekiq/retries interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Retries)
+	fmt.Printf("PUTVAL %s/sidekiq/scheduled interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Scheduled)
+	fmt.Printf("PUTVAL %s/sidekiq/dead interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Dead)
+	fmt.Printf("PUTVAL %s/sidekiq/processes interval=%d %d:%d\n", hostname, interval, t.Unix(), s.Processes)
 	for q, c := range s.Enqueued.(map[string]interface{}) {
 		fmt.Printf("PUTVAL %s/sidekiq-%s/queue_depth interval=%d %d:%s\n", hostname, q, interval, t.Unix(), c)
 	}

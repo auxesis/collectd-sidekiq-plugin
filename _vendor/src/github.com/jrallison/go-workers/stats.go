@@ -13,6 +13,9 @@ type stats struct {
 	Jobs      interface{} `json:"jobs"`
 	Enqueued  interface{} `json:"enqueued"`
 	Retries   int64       `json:"retries"`
+	Scheduled int64       `json:"scheduled"`
+	Dead      int64       `json:"dead"`
+	Processes int64       `json:"processes"`
 }
 
 func Stats(w http.ResponseWriter, req *http.Request) {
@@ -45,6 +48,9 @@ func Stats(w http.ResponseWriter, req *http.Request) {
 		jobs,
 		enqueued,
 		0,
+		0,
+		0,
+		0,
 	}
 
 	conn := Config.Pool.Get()
@@ -53,7 +59,10 @@ func Stats(w http.ResponseWriter, req *http.Request) {
 	conn.Send("multi")
 	conn.Send("get", Config.Namespace+"stat:processed")
 	conn.Send("get", Config.Namespace+"stat:failed")
-	conn.Send("zcard", Config.Namespace+RETRY_KEY)
+	conn.Send("zcard", Config.Namespace+"retry")
+	conn.Send("zcard", Config.Namespace+"dead")
+	conn.Send("scard", Config.Namespace+"processes")
+	conn.Send("zcard", Config.Namespace+"schedule")
 
 	for key, _ := range enqueued {
 		conn.Send("llen", fmt.Sprintf("%squeue:%s", Config.Namespace, key))
@@ -66,7 +75,7 @@ func Stats(w http.ResponseWriter, req *http.Request) {
 	}
 
 	results := r.([]interface{})
-	if len(results) == (3 + len(enqueued)) {
+	if len(results) == (6 + len(enqueued)) {
 		for index, result := range results {
 			if index == 0 && result != nil {
 				stats.Processed, _ = strconv.Atoi(string(result.([]byte)))
@@ -82,9 +91,24 @@ func Stats(w http.ResponseWriter, req *http.Request) {
 				continue
 			}
 
+			if index == 3 && result != nil {
+				stats.Dead = result.(int64)
+				continue
+			}
+
+			if index == 4 && result != nil {
+				stats.Processes = result.(int64)
+				continue
+			}
+
+			if index == 5 && result != nil {
+				stats.Scheduled = result.(int64)
+				continue
+			}
+
 			queueIndex := 0
 			for key, _ := range enqueued {
-				if queueIndex == (index - 3) {
+				if queueIndex == (index - 6) {
 					enqueued[key] = fmt.Sprintf("%d", result.(int64))
 				}
 				queueIndex++
