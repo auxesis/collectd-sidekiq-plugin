@@ -35,7 +35,7 @@ func setup(server string, database string, pool string, queues string) {
 		"process": "1",
 	})
 
-	for _, q := range strings.Split(queues, "/") {
+	for _, q := range strings.Split(queues, ",") {
 		// Register each queue with the workers library, so it's picked up on calls to workers.Stats()
 		workers.Process(q, func(message *workers.Msg) {}, 0)
 	}
