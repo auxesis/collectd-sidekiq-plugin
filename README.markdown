@@ -99,7 +99,7 @@ For these settings to take effect, make sure you update your collectd configurat
 ```
 LoadPlugin exec
 <Plugin exec>
-  Exec deploy "/usr/local/bin/collectd_sidekiq --queues=scraper,worker --redis-server=localhost:6780 --redis-database=7"
+  Exec deploy "/usr/local/bin/collectd_sidekiq" "--queues=scraper,worker" "--redis-server=localhost:6780" "--redis-database=7"
 </Plugin>
 ```
 
