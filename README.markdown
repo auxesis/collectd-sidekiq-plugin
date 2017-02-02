@@ -62,13 +62,13 @@ You should soon see Sidekiq stats showing up in your graphs:
 You almost certainly aren't using the default Sidekiq queues, so to change the queues to query:
 
 ```
-collectd_sidekiq --queues="scraper,worker"
+collectd_sidekiq --queues=scraper,worker
 ```
 
 To change the Redis instance to query:
 
 ```
-collectd_sidekiq --redis-server="192.168.1.111:6380"
+collectd_sidekiq --redis-server=192.168.1.111:6380
 ```
 
 To change the Redis database to query:
@@ -99,7 +99,7 @@ For these settings to take effect, make sure you update your collectd configurat
 ```
 LoadPlugin exec
 <Plugin exec>
-  Exec deploy "/usr/local/bin/collectd_sidekiq --queues='scraper,worker' --redis-server='localhost:6780' --redis-database=7"
+  Exec deploy "/usr/local/bin/collectd_sidekiq --queues=scraper,worker --redis-server=localhost:6780 --redis-database=7"
 </Plugin>
 ```
 
